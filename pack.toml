@@ -13,6 +13,41 @@ type = "local"
 path = "../FinSc-Multiset-Transform"
 ipkg = "FinSc-Multiset-Transform.ipkg"
 
+[custom.all.FinSc-Multiset-Ternary]
+type = "local"
+path = "../FinSc-Multiset-Ternary"
+ipkg = "FinSc-Multiset-Ternary.ipkg"
+
+[custom.all.FinSc-Multiset-Binary]
+type = "local"
+path = "../FinSc-Multiset-Binary"
+ipkg = "FinSc-Multiset-Binary.ipkg"
+
+[custom.all.FinSc-Dihedron]
+type = "local"
+path = "../FinSc-Dihedron"
+ipkg = "FinSc-Dihedron.ipkg"
+
+[custom.all.FinSc-Geometry]
+type = "local"
+path = "../FinSc-Geometry"
+ipkg = "FinSc-Geometry.ipkg"
+
+[custom.all.FinSc-Electromagnetism]
+type = "local"
+path = "../FinSc-Electromagnetism"
+ipkg = "FinSc-Electromagnetism.ipkg"
+
+[custom.all.FinSc-Fields]
+type = "local"
+path = "../FinSc-Fields"
+ipkg = "FinSc-Fields.ipkg"
+
+[custom.all.FinSc-QuantumComputing]
+type = "local"
+path = "../FinSc-QuantumComputing"
+ipkg = "FinSc-QuantumComputing.ipkg"
+
 [custom.all.FinSc-Physics]
 type = "local"
 path = "../FinSc-Physics"

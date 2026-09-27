@@ -7,6 +7,15 @@ depends = FinSc-Chemistry, FinSc-Geometry, FinSc-Multiset-Core, FinSc-Multiset-T
 sourcedir = "src"
 
 modules = Biology,
+          Stage0.Biology.ActionPotentialKinetics,
+          Stage0.Biology.ActiveInferenceNeuralNetwork,
+          Stage0.Biology.BiologyScaleTransforms,
+          Stage0.Biology.BiophysicalAggregation,
+          Stage0.Biology.EnzymeKinetics,
+          Stage0.Biology.HierarchicalMatterPipeline,
+          Stage0.Biology.RibosomalTranslation,
+          Stage1.Biology.AllostericCooperativity,
+          Stage1.Biology.UniversalAlgebraTRS,
           Biology.ActionPotentialKinetics,
           Biology.AllostericCooperativity,
           Biology.EnzymeKinetics,
@@ -20,4 +29,3 @@ modules = Biology,
           Math.AllostericCooperativity,
           Math.EnzymeKinetics,
           Math.RibosomalTranslation
-
