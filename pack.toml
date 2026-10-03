@@ -53,10 +53,10 @@ type = "local"
 path = "../FinSc-Action-Dynamics"
 ipkg = "FinSc-Action-Dynamics.ipkg"
 
-[custom.all.FinSc-Hadron]
+[custom.all.FinSc-Nuclear-Matter]
 type = "local"
-path = "../FinSc-Hadron"
-ipkg = "FinSc-Hadron.ipkg"
+path = "../FinSc-Nuclear-Matter"
+ipkg = "FinSc-Nuclear-Matter.ipkg"
 
 [custom.all.FinSc-Chemistry]
 type = "local"
