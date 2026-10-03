@@ -1,9 +1,9 @@
 package FinSc-Biology
 version = 0.3.0
 authors = "Justin Kelly"
-brief   = "Layer 5b Biological Systems & Active Inference Neural Network Library."
+brief   = "Layer 7 Biological Systems & Active Inference Neural Network Library."
 
-depends = FinSc-Chemistry, FinSc-Geometry, FinSc-Multiset-Core, FinSc-Multiset-Transform, FinSc-Physics, base, linear
+depends = FinSc-Chemistry, FinSc-Geometry, FinSc-Multiset, FinSc-Metric-Substrate, FinSc-Multiset-Transform, FinSc-Action-Dynamics, base, linear
 sourcedir = "src"
 
 modules = Biology,

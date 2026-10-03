@@ -38,20 +38,20 @@ type = "local"
 path = "../FinSc-Electromagnetism"
 ipkg = "FinSc-Electromagnetism.ipkg"
 
-[custom.all.FinSc-Fields]
+[custom.all.FinSc-Gauge-Fields]
 type = "local"
-path = "../FinSc-Fields"
-ipkg = "FinSc-Fields.ipkg"
+path = "../FinSc-Gauge-Fields"
+ipkg = "FinSc-Gauge-Fields.ipkg"
 
-[custom.all.FinSc-QuantumComputing]
+[custom.all.FinSc-Quantum-Coherence]
 type = "local"
-path = "../FinSc-QuantumComputing"
-ipkg = "FinSc-QuantumComputing.ipkg"
+path = "../FinSc-Quantum-Coherence"
+ipkg = "FinSc-Quantum-Coherence.ipkg"
 
-[custom.all.FinSc-Physics]
+[custom.all.FinSc-Action-Dynamics]
 type = "local"
-path = "../FinSc-Physics"
-ipkg = "FinSc-Physics.ipkg"
+path = "../FinSc-Action-Dynamics"
+ipkg = "FinSc-Action-Dynamics.ipkg"
 
 [custom.all.FinSc-Hadron]
 type = "local"

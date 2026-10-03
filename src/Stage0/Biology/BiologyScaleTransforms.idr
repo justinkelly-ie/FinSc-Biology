@@ -4,7 +4,7 @@ import Stage0.BoxInt
 import Stage0.WitnessLedger
 import Stage0.Multiset
 import Stage1.MultisetTensor
-import Stage1.Category.Adjunction
+import Stage1.MultisetDuality
 import Stage1.TypeTheory.Staging
 import Stage1.TypeTheory.TwoLevel
 import public Stage1.ScaleTransform
@@ -129,8 +129,9 @@ StrictReflectionFunctor ConcreteBiologyFunctor AbstractBiologyFunctor where
 
 ||| QTT 0 Erased Proof: Biology Scale Multiset Adjunction Duality Invariant
 public export
-0 prfBioScaleAdjunctionDuality : (n : BoxInt) -> n = n
-prfBioScaleAdjunctionDuality = prfMultisetDuality
+0 prfBioScaleAdjunctionDuality : (t : MultisetTensor (ConcreteBiologyFunctor Nat) Nat) ->
+                                 bioHomTensorInv (bioHomTensorIso t) = t
+prfBioScaleAdjunctionDuality = proofBioHomIso
 
 ||| ScaleTransform instance: Maps a DNA Double Helix to its total Hydrogen Bond Count
 public export

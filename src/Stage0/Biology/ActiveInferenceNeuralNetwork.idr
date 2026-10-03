@@ -4,7 +4,7 @@ import Stage0.BoxInt
 import Stage0.WitnessLedger
 import Stage0.Multiset
 import Stage1.MultisetTensor
-import Stage1.Category.Adjunction
+import Stage1.MultisetDuality
 import Transform
 import Data.List
 import Stage0.OnSeq.FusedStream
