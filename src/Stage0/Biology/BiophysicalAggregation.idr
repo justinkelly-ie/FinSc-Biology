@@ -3,7 +3,7 @@ module Stage0.Biology.BiophysicalAggregation
 import Stage0.BoxInt
 import Stage0.Multiset
 import Stage1.VexelMaxel
-import Transform
+import PhaseUnfolding
 import Stage1.Chemistry.WatsonCrickBasePairing
 import Stage1.Math.MacromolecularChirality
 import Data.List

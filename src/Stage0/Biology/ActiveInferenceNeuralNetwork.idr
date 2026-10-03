@@ -5,7 +5,7 @@ import Stage0.WitnessLedger
 import Stage0.Multiset
 import Stage1.MultisetTensor
 import Stage1.MultisetDuality
-import Transform
+import PhaseUnfolding
 import Data.List
 import Stage0.OnSeq.FusedStream
 import Data.Fuel

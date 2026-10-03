@@ -4,7 +4,7 @@ import Language.Reflection
 import Stage0.Singleton.Bit
 import Stage0.BoxInt
 import Stage0.Multiset
-import Transform
+import PhaseUnfolding
 import Stage1.ExclusionPrinciple
 import Stage1.ChromoCategory
 import Stage0.ChromoLawFunctor

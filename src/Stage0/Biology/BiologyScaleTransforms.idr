@@ -8,7 +8,7 @@ import Stage1.MultisetDuality
 import Stage1.TypeTheory.Staging
 import Stage1.TypeTheory.TwoLevel
 import public Stage1.ScaleTransform
-import Transform
+import PhaseUnfolding
 import Stage0.Biology.BiophysicalAggregation
 
 %default total
