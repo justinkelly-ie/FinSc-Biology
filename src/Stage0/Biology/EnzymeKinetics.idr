@@ -97,7 +97,7 @@ stepCatalysis sys km kcat =
 ------------------------------------------------------------------------
 
 ||| Zero-allocation deforested Michaelis-Menten enzyme catalysis stream transducer.
-public export covering
+public export
 fusedComputeEnzymeKineticsStream : Fuel -> (km : BoxInt) -> (kcat : BoxInt) -> Vexel -> List Vexel
 fusedComputeEnzymeKineticsStream f km kcat initSys =
   runFueledStream f (unfoldStream nextStep initSys)
@@ -117,7 +117,7 @@ fusedComputeEnzymeKineticsStream f km kcat initSys =
 ||| 3. Stepping catalysis maintains exact enzyme conservation: [E] + [ES] == [E]_0 = 10.
 ||| 4. Total substrate + product + complex tokens conserved: S + P + ES = 50.
 ||| 5. Zero-allocation deforested stream generation produces consistent catalysis trace.
-public export covering
+public export
 auditEnzymeKineticsProof : Bool
 auditEnzymeKineticsProof =
   let initSys = enzymeVexel (intToBoxInt 10) (intToBoxInt 0) (intToBoxInt 50) (intToBoxInt 0) (intToBoxInt 10)

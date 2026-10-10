@@ -117,7 +117,7 @@ Eq CodonTriplet where
 ------------------------------------------------------------------------
 
 ||| Zero-allocation deforested mRNA ribosomal translation stream transducer.
-public export covering
+public export
 fusedComputeRibosomalTranslationStream : Fuel -> List CodonTriplet -> List AminoAcid
 fusedComputeRibosomalTranslationStream f codons =
   fusedHylomorphism f
@@ -127,6 +127,39 @@ fusedComputeRibosomalTranslationStream f codons =
     (\aa, acc => aa :: acc)
     []
     codons
+
+||| Translates a raw stream of RNABase nucleotides into a deforested stream of AminoAcids,
+||| buffering triplet codons internally in O(1) state registers without allocating intermediate codon lists.
+public export
+streamTranslateRNA : FusedStream RNABase -> FusedStream AminoAcid
+streamTranslateRNA (MkStream {s} next seed) =
+  MkStream {s = (s, List RNABase)}
+    (\(st, buf) =>
+      case buf of
+        [b1, b2] =>
+          case next st of
+            Done => Done
+            Skip st' => Skip (st', [b1, b2])
+            Yield b3 st' => Yield (translateCodon b1 b2 b3) (st', [])
+        [b1] =>
+          case next st of
+            Done => Done
+            Skip st' => Skip (st', [b1])
+            Yield b2 st' => Skip (st', [b1, b2])
+        [] =>
+          case next st of
+            Done => Done
+            Skip st' => Skip (st', [])
+            Yield b1 st' => Skip (st', [b1])
+        _ => Done
+    )
+    (seed, [])
+
+||| Translates an mRNA nucleotide stream into an amino acid list using deforested stream translation:
+public export
+fusedTranslateRNABases : Fuel -> List RNABase -> List AminoAcid
+fusedTranslateRNABases f rna =
+  runFueledStream f (streamTranslateRNA (stream rna))
 
 ------------------------------------------------------------------------
 -- 4. FORMAL INVARIANT AUDIT
@@ -138,12 +171,17 @@ fusedComputeRibosomalTranslationStream f codons =
 ||| 3. Proves 3rd-position wobble mutational error is strictly buffered (error = 0).
 ||| 4. Proves genetic code robustness against point mutations.
 ||| 5. Zero-allocation deforested stream translation produces cognate peptide sequence.
-public export covering
+public export
 auditRibosomalTranslationProof : Bool
 auditRibosomalTranslationProof =
   let tMet = translateCodon A U G == Met
       tPhe1 = translateCodon U U U == Phe
       tPhe2 = translateCodon U U C == Phe
       tWobbleZero = codonWobbleError U U U U == intToBoxInt 0
-      translatedPeptide = fusedComputeRibosomalTranslationStream (limit 10) [MkCodon A U G, MkCodon U U U, MkCodon U U C]
-  in tMet && tPhe1 && tPhe2 && tWobbleZero && translatedPeptide == [Met, Phe, Phe]
+      codons = [MkCodon A U G, MkCodon U U U, MkCodon U U C]
+      translatedPeptide = fusedComputeRibosomalTranslationStream (limit (length codons)) codons
+      rnaBases = [A, U, G, U, U, U, U, U, C]
+      translatedFromBases = fusedTranslateRNABases (limit 9) rnaBases
+  in tMet && tPhe1 && tPhe2 && tWobbleZero &&
+     translatedPeptide == [Met, Phe, Phe] &&
+     translatedFromBases == [Met, Phe, Phe]

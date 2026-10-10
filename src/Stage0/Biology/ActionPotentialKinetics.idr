@@ -1,6 +1,7 @@
 module Stage0.Biology.ActionPotentialKinetics
 
 import Stage0.BoxInt
+import Stage0.StructuralFuel
 import Stage1.UnixelFraction
 import Stage0.OnSeq.FusedStream
 import Data.Fuel
@@ -82,11 +83,11 @@ auditActionPotentialKineticsProof =
 -- 4. DEFORESTED ACTION POTENTIAL KINETIC STREAMS
 ------------------------------------------------------------------------
 
-||| Zero-allocation action potential simulation accumulating total membrane voltage flux using fusedHylomorphism.
-public export covering
-fusedComputeMembraneVoltageFlux : Data.Fuel.Fuel -> NeuronMembrane -> List BoxInt -> BoxInt
-fusedComputeMembraneVoltageFlux f initialNeuron currents =
-  Stage0.OnSeq.FusedStream.fusedHylomorphism f
+||| Zero-allocation action potential simulation accumulating total membrane voltage flux using total structural Nat fuel.
+public export
+fusedComputeMembraneVoltageFluxNat : Nat -> NeuronMembrane -> List BoxInt -> BoxInt
+fusedComputeMembraneVoltageFluxNat fuel initialNeuron currents =
+  Stage0.OnSeq.FusedStream.fusedHylomorphismNat fuel
     (\(n, currs) => case currs of
                       [] => Done
                       inj :: rest =>
@@ -95,3 +96,16 @@ fusedComputeMembraneVoltageFlux f initialNeuron currents =
     (\v, acc => v + acc)
     (intToBoxInt 0)
     (initialNeuron, currents)
+
+||| Zero-allocation action potential simulation accumulating total membrane voltage flux using BoxNat fuel.
+public export
+fusedComputeMembraneVoltageFluxBoxNat : BoxNat -> NeuronMembrane -> List BoxInt -> BoxInt
+fusedComputeMembraneVoltageFluxBoxNat bfuel initialNeuron currents =
+  fusedComputeMembraneVoltageFluxNat (boxNatToNat bfuel) initialNeuron currents
+
+||| Zero-allocation action potential simulation accumulating total membrane voltage flux using fusedHylomorphism.
+public export
+fusedComputeMembraneVoltageFlux : Data.Fuel.Fuel -> NeuronMembrane -> List BoxInt -> BoxInt
+fusedComputeMembraneVoltageFlux (More f) initialNeuron currents =
+  fusedComputeMembraneVoltageFluxBoxNat masterSubstrateGohFuel initialNeuron currents
+fusedComputeMembraneVoltageFlux Dry _ _ = intToBoxInt 0

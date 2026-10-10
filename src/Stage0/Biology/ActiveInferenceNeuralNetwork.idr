@@ -98,7 +98,7 @@ fusedActiveInferenceStream strm =
   mapStream (\n => MkNeuronState (neuronId n) (fireRate n + intToBoxInt 1)) strm
 
 ||| Evaluates active inference neural updates over a deforested stream.
-public export covering
+public export
 fusedActiveInferenceStep : Fuel -> List NeuronState -> List NeuronState
 fusedActiveInferenceStep f neurons =
   runFueledStream f (fusedActiveInferenceStream (stream neurons))
@@ -109,10 +109,11 @@ auditActiveInferenceNeuralNetworkProof : Bool
 auditActiveInferenceNeuralNetworkProof = True
 
 ||| Audit witness verifying active inference streaming transducer equivalence.
-public export covering
+public export
 auditFusedActiveInferenceProof : Bool
 auditFusedActiveInferenceProof =
   let n1 = MkNeuronState 1 (intToBoxInt 5)
       n2 = MkNeuronState 2 (intToBoxInt 10)
-      res = fusedActiveInferenceStep (limit 10) [n1, n2]
+      neurons = [n1, n2]
+      res = fusedActiveInferenceStep (limit (length neurons)) neurons
   in length res == 2

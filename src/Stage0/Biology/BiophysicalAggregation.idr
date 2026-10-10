@@ -6,7 +6,9 @@ import Stage1.VexelMaxel
 import PhaseUnfolding
 import Stage1.Chemistry.WatsonCrickBasePairing
 import Stage1.Math.MacromolecularChirality
+import Stage0.OnSeq.FusedStream
 import Data.List
+import Data.Vect
 
 %default total
 
@@ -55,15 +57,43 @@ peptideChainTransform = mkTransformBox EllipticSector unitUnixelFraction
   , ((DHand, DHand), intToBoxInt 1)
   ]
 
-||| Aggregates a set of nucleotide base pairs into a DNA Double Helix.
+||| Aggregates a deforested stream of nucleotide base pairs into a DNA Double Helix.
+||| Uses a single-pass fused fold over the stream without allocating intermediate list cells.
 ||| Pushes Law 48 (Watson-Crick Pairing: A-T=2, G-C=3) forward to the helix.
 public export
-aggregateDnaDoubleHelix : List DnaBasePair -> DnaDoubleHelix
-aggregateDnaDoubleHelix pairs =
-  let pairsBox = foldl (\acc, p => insertBox p (intToBoxInt 1) acc) emptyBox pairs
+aggregateDnaDoubleHelixStream : FusedStream DnaBasePair -> DnaDoubleHelix
+aggregateDnaDoubleHelixStream strm =
+  let (pairsBox, hBonds) = foldStream
+        (\acc, p =>
+          let (accBox, accH) = acc
+          in ( insertBox p (intToBoxInt 1) accBox
+             , accH + basePairHBondCount (strand1 p) (strand2 p)
+             ))
+        (emptyBox, 0)
+        strm
       pushedBox = applyPushforwardContraction dnaDoubleHelixTransform pairsBox
-      hBonds = foldl (\acc, p => acc + basePairHBondCount (strand1 p) (strand2 p)) 0 pairs
   in MkDnaDoubleHelix pushedBox hBonds
+
+||| Aggregates a compile-time static vector of nucleotide base pairs into a DNA Double Helix.
+public export
+aggregateDnaDoubleHelixVect : {n : Nat} -> Vect n DnaBasePair -> DnaDoubleHelix
+aggregateDnaDoubleHelixVect pairs =
+  let (pairsBox, hBonds) = foldl
+        (\acc, p =>
+          let (accBox, accH) = acc
+          in ( insertBox p (intToBoxInt 1) accBox
+             , accH + basePairHBondCount (strand1 p) (strand2 p)
+             ))
+        (emptyBox, 0)
+        pairs
+      pushedBox = applyPushforwardContraction dnaDoubleHelixTransform pairsBox
+  in MkDnaDoubleHelix pushedBox hBonds
+
+||| Aggregates a set of nucleotide base pairs into a DNA Double Helix.
+||| Deforests the input list via streamification and single-pass accumulation.
+public export
+aggregateDnaDoubleHelix : List DnaBasePair -> DnaDoubleHelix
+aggregateDnaDoubleHelix pairs = aggregateDnaDoubleHelixStream (stream pairs)
 
 ||| Aggregates L-amino acids into a condensed Peptide Chain.
 ||| Pushes Law 49 (Homochirality & Peptide Condensation: m1+m2-18) forward to the chain.
@@ -80,9 +110,20 @@ aggregatePeptideChain m1 m2 =
 ------------------------------------------------------------------------
 
 ||| Audits Biophysical Aggregation Pushforward:
-||| 1. DNA Double Helix (1 A-T pair + 1 G-C pair) carries 2 + 3 = 5 H-bonds.
+||| 1. DNA Double Helix (1 A-T pair + 1 G-C pair) carries 2 + 3 = 5 H-bonds across streams and vectors.
 ||| 2. Peptide condensation (100 + 100 - 18) yields 182 net mass tokens.
 %inline
 public export
 auditBiophysicalAggregationProof : Bool
-auditBiophysicalAggregationProof = True
+auditBiophysicalAggregationProof =
+  let p1 = MkBasePair Adenine Thymine
+      p2 = MkBasePair Guanine Cytosine
+      strm = stream [p1, p2]
+      helixStream = aggregateDnaDoubleHelixStream strm
+      helixVect = aggregateDnaDoubleHelixVect [p1, p2]
+      hBondsValid = totalHBonds helixStream == 5 && totalHBonds helixVect == 5
+      m1 = intToBoxInt 100
+      m2 = intToBoxInt 100
+      pep = aggregatePeptideChain m1 m2
+      massValid = netMassTokens pep == intToBoxInt 182
+  in hBondsValid && massValid
