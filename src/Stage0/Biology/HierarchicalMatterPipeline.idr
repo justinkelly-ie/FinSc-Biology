@@ -159,14 +159,22 @@ stepPhase5_ScaleBridgeInvariant =
 public export
 stepPhase6_ATPPhosphateBalance : Bool
 stepPhase6_ATPPhosphateBalance =
-  intToBoxInt 210 == intToBoxInt 210
+  let atp = seedATP
+      res = hydrolyzeATP atp
+  in phosphateGroups atp == 3 &&
+     phosphoAnhydrideBonds atp == 2 &&
+     energyTokensReleased res == 1 &&
+     adpPhosphates res == 2 &&
+     inorganicPhosphate res == 1
 
 ||| Phase 7 Step: Homochiral Macromolecular Self-Replication (Watson-Crick DNA).
 ||| Invariant L-amino and D-sugar chiral selection across complementary base pairs (GC=3, AT=2).
 public export
 stepPhase7_DNAReplicationInvariant : Bool
 stepPhase7_DNAReplicationInvariant =
-  (intToBoxInt 3 == intToBoxInt 3) && (intToBoxInt 2 == intToBoxInt 2)
+  (basePairHBondCount Guanine Cytosine == 3) &&
+  (basePairHBondCount Adenine Thymine == 2) &&
+  (basePairHBondCount Adenine Cytosine == 0)
 
 ------------------------------------------------------------------------
 -- 4. FUNCTORIAL CATEGORICAL MATTER PIPELINE TRANSITIONS
@@ -195,9 +203,9 @@ functorialChemistryToBiology =
 public export
 auditHierarchicalMatterAscentProof : Bool
 auditHierarchicalMatterAscentProof =
-  (intToBoxInt 27 == intToBoxInt 27) &&
-  (intToBoxInt 108 == intToBoxInt 108) &&
-  (intToBoxInt 324 == intToBoxInt 324) &&
+  (stepPhase1_QuarkToNucleon == intToBoxInt 27) &&
+  (stepPhase2_NucleonToAlpha == intToBoxInt 108) &&
+  (stepPhase3_AlphaToCarbon == intToBoxInt 324) &&
   stepPhase5_WaterMoleculeBalance &&
   stepPhase5_ScaleBridgeInvariant &&
   stepPhase6_ATPPhosphateBalance &&

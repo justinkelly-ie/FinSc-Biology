@@ -298,11 +298,11 @@ soundnessProofForTermBit t = boolToBit (soundnessProofForTerm t)
 public export
 auditUniversalAlgebraSoundnessProof : Bool
 auditUniversalAlgebraSoundnessProof =
-  (intToBoxInt 27 == intToBoxInt 27) &&
-  (intToBoxInt 108 == intToBoxInt 108) &&
-  (intToBoxInt 324 == intToBoxInt 324) &&
-  (intToBoxInt 432 == intToBoxInt 432) &&
-  (intToBoxInt 486 == intToBoxInt 486)
+  (stepPhase1_QuarkToNucleon == intToBoxInt 27) &&
+  (stepPhase2_NucleonToAlpha == intToBoxInt 108) &&
+  (stepPhase3_AlphaToCarbon == intToBoxInt 324) &&
+  (stepPhase3_AlphaToCarbon + stepPhase2_NucleonToAlpha == intToBoxInt 432) &&
+  (stepPhase5_WaterFundamentalTokens == intToBoxInt 486)
 
 public export
 auditUniversalAlgebraSoundnessProofBit : Bit
