@@ -5,6 +5,9 @@ import Stage1.UnixelFraction
 import Stage1.VexelMaxel
 import Stage0.OnSeq.FusedStream
 import public Stage0.TransitionNetwork
+import Stage1.Goh.Factor
+import Stage1.Goh.Combinator.Multiplicative
+import Stage1.TypeTheory.Smoothness
 import Data.Fuel
 import Data.List
 import Data.Fin
@@ -136,14 +139,31 @@ auditEnzymeKineticsProof =
 -- 5. OBSERVER EPOCH (k=38) ENZYMATIC & METABOLIC TRANSITION NETWORKS
 ------------------------------------------------------------------------
 
-||| Observer Epoch k=38 (n=39=3x13): Gate-pure dissipative steady state (Rule 03 & Rule 05).
+||| Observer Epoch k=38: Gate-pure dissipative steady state (Rule 03 & Rule 05).
 public export
 observerEpochK : Nat
 observerEpochK = 38
 
+||| Observer Epoch generation index n = 39 = 3 * 13, generated directly
+||| from the multiplicative product of GohPrime 3 and GohPrime 13.
 public export
 observerEpochN : Nat
-observerEpochN = 39
+observerEpochN = gohMulPrimeNat Prime3 Prime13
+
+||| Certified 13-smooth cosmic dimension of the Observer Epoch.
+public export
+0 observerEpochDimension : CosmicDimension
+observerEpochDimension = dimObserver
+
+||| Static compile-time witness: observerEpochN definitionally evaluates to 39.
+public export
+0 verifyObserverEpochNIdentity : (the Nat Stage0.Biology.EnzymeKinetics.observerEpochN) = 39
+verifyObserverEpochNIdentity = Refl
+
+||| Static compile-time witness: observerEpochN matches the certified observer dimension carrier.
+public export
+0 verifyObserverEpochDimensionMatch : (the Nat Stage0.Biology.EnzymeKinetics.observerEpochN) = Builtin.DPair.DPair.fst Stage1.TypeTheory.Smoothness.dimObserver
+verifyObserverEpochDimensionMatch = Refl
 
 ||| Molecular species participating in enzymatic catalysis and ATP-driven metabolism.
 public export
@@ -347,5 +367,11 @@ public export
 auditEnzymeKineticsFullProof : Bool
 auditEnzymeKineticsFullProof =
   auditEnzymeKineticsProof &&
-  auditEnzymaticMetabolicConservation
+  auditEnzymaticMetabolicConservation &&
+  (observerEpochN == 39)
+
+||| Static compile-time witness certifying total enzyme kinetics and observer epoch invariant.
+public export
+0 verifyEnzymeKineticsFullProof : Stage0.Biology.EnzymeKinetics.auditEnzymeKineticsFullProof = True
+verifyEnzymeKineticsFullProof = Refl
 
