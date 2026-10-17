@@ -103,6 +103,12 @@ fusedActiveInferenceStep : Fuel -> List NeuronState -> List NeuronState
 fusedActiveInferenceStep f neurons =
   runFueledStream f (fusedActiveInferenceStream (stream neurons))
 
+||| Evaluates active inference neural updates over Nat fuel.
+public export
+fusedActiveInferenceStepNat : Nat -> List NeuronState -> List NeuronState
+fusedActiveInferenceStepNat fuel neurons =
+  runFueledStreamNat fuel (fusedActiveInferenceStream (stream neurons))
+
 ||| Audits that Active Inference neural updates preserve total signal energy.
 public export
 auditActiveInferenceNeuralNetworkProof : Bool
@@ -115,5 +121,5 @@ auditFusedActiveInferenceProof =
   let n1 = MkNeuronState 1 (intToBoxInt 5)
       n2 = MkNeuronState 2 (intToBoxInt 10)
       neurons = [n1, n2]
-      res = fusedActiveInferenceStep (limit (length neurons)) neurons
+      res = fusedActiveInferenceStepNat (length neurons) neurons
   in length res == 2

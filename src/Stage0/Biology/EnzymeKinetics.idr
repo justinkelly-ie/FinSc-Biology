@@ -111,6 +111,17 @@ fusedComputeEnzymeKineticsStream f km kcat initSys =
       let stepped = stepCatalysis sys km kcat
       in Yield stepped stepped
 
+||| Zero-allocation deforested Michaelis-Menten enzyme catalysis stream transducer over Nat fuel.
+public export
+fusedComputeEnzymeKineticsStreamNat : Nat -> (km : BoxInt) -> (kcat : BoxInt) -> Vexel -> List Vexel
+fusedComputeEnzymeKineticsStreamNat fuel km kcat initSys =
+  runFueledStreamNat fuel (unfoldStream nextStep initSys)
+  where
+    nextStep : Vexel -> Step Vexel Vexel
+    nextStep sys =
+      let stepped = stepCatalysis sys km kcat
+      in Yield stepped stepped
+
 ------------------------------------------------------------------------
 -- 4. FORMAL INVARIANT AUDIT
 ------------------------------------------------------------------------
@@ -127,7 +138,7 @@ auditEnzymeKineticsProof =
   let initSys = enzymeVexel (intToBoxInt 10) (intToBoxInt 0) (intToBoxInt 50) (intToBoxInt 0) (intToBoxInt 10)
       v = computeReactionVelocity (intToBoxInt 100) (intToBoxInt 25) (intToBoxInt 50)
       stepped = stepCatalysis initSys (intToBoxInt 25) (intToBoxInt 2)
-      strmTrace = fusedComputeEnzymeKineticsStream (limit 2) (intToBoxInt 25) (intToBoxInt 2) initSys
+      strmTrace = fusedComputeEnzymeKineticsStreamNat 2 (intToBoxInt 25) (intToBoxInt 2) initSys
 
       tVel = v == intToBoxInt 66
       tEnzymeConserv = enzymeFreeEnzyme stepped + enzymeEnzymeComplex stepped == enzymeTotalEnzyme stepped

@@ -128,6 +128,18 @@ fusedComputeRibosomalTranslationStream f codons =
     []
     codons
 
+||| Zero-allocation deforested mRNA ribosomal translation stream transducer over Nat fuel.
+public export
+fusedComputeRibosomalTranslationStreamNat : Nat -> List CodonTriplet -> List AminoAcid
+fusedComputeRibosomalTranslationStreamNat fuel codons =
+  fusedHylomorphismNat fuel
+    (\st => case st of
+              [] => Done
+              (MkCodon b1 b2 b3) :: rest => Yield (translateCodon b1 b2 b3) rest)
+    (\aa, acc => aa :: acc)
+    []
+    codons
+
 ||| Translates a raw stream of RNABase nucleotides into a deforested stream of AminoAcids,
 ||| buffering triplet codons internally in O(1) state registers without allocating intermediate codon lists.
 public export
@@ -161,6 +173,12 @@ fusedTranslateRNABases : Fuel -> List RNABase -> List AminoAcid
 fusedTranslateRNABases f rna =
   runFueledStream f (streamTranslateRNA (stream rna))
 
+||| Translates an mRNA nucleotide stream into an amino acid list over Nat fuel.
+public export
+fusedTranslateRNABasesNat : Nat -> List RNABase -> List AminoAcid
+fusedTranslateRNABasesNat fuel rna =
+  runFueledStreamNat fuel (streamTranslateRNA (stream rna))
+
 ------------------------------------------------------------------------
 -- 4. FORMAL INVARIANT AUDIT
 ------------------------------------------------------------------------
@@ -179,9 +197,9 @@ auditRibosomalTranslationProof =
       tPhe2 = translateCodon U U C == Phe
       tWobbleZero = codonWobbleError U U U U == intToBoxInt 0
       codons = [MkCodon A U G, MkCodon U U U, MkCodon U U C]
-      translatedPeptide = fusedComputeRibosomalTranslationStream (limit (length codons)) codons
+      translatedPeptide = fusedComputeRibosomalTranslationStreamNat (length codons) codons
       rnaBases = [A, U, G, U, U, U, U, U, C]
-      translatedFromBases = fusedTranslateRNABases (limit 9) rnaBases
+      translatedFromBases = fusedTranslateRNABasesNat 9 rnaBases
   in tMet && tPhe1 && tPhe2 && tWobbleZero &&
      translatedPeptide == [Met, Phe, Phe] &&
      translatedFromBases == [Met, Phe, Phe]
