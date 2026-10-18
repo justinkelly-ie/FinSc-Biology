@@ -37,27 +37,22 @@ enzymeVexel e es s p e0 =
 
 public export
 enzymeFreeEnzyme : Vexel -> BoxInt
-enzymeFreeEnzyme (MkVexel ((MkUnixel 0, e) :: _)) = e
 enzymeFreeEnzyme v = lookupUnixel (MkUnixel 0) v
 
 public export
 enzymeEnzymeComplex : Vexel -> BoxInt
-enzymeEnzymeComplex (MkVexel (_ :: (MkUnixel 1, es) :: _)) = es
 enzymeEnzymeComplex v = lookupUnixel (MkUnixel 1) v
 
 public export
 enzymeSubstrate : Vexel -> BoxInt
-enzymeSubstrate (MkVexel (_ :: _ :: (MkUnixel 2, s) :: _)) = s
 enzymeSubstrate v = lookupUnixel (MkUnixel 2) v
 
 public export
 enzymeProduct : Vexel -> BoxInt
-enzymeProduct (MkVexel (_ :: _ :: _ :: (MkUnixel 3, p) :: _)) = p
 enzymeProduct v = lookupUnixel (MkUnixel 3) v
 
 public export
 enzymeTotalEnzyme : Vexel -> BoxInt
-enzymeTotalEnzyme (MkVexel (_ :: _ :: _ :: _ :: (MkUnixel 4, e0) :: _)) = e0
 enzymeTotalEnzyme v = lookupUnixel (MkUnixel 4) v
 
 ||| Discrete Reaction Velocity Rate:
@@ -380,9 +375,4 @@ auditEnzymeKineticsFullProof =
   auditEnzymeKineticsProof &&
   auditEnzymaticMetabolicConservation &&
   (observerEpochN == 39)
-
-||| Static compile-time witness certifying total enzyme kinetics and observer epoch invariant.
-public export
-0 verifyEnzymeKineticsFullProof : Stage0.Biology.EnzymeKinetics.auditEnzymeKineticsFullProof = True
-verifyEnzymeKineticsFullProof = Refl
 
