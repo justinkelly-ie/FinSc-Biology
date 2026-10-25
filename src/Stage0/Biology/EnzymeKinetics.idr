@@ -2,7 +2,9 @@ module Stage0.Biology.EnzymeKinetics
 
 import Stage0.BoxInt
 import Stage1.UnixelFraction
-import Stage1.VexelMaxel
+import Stage1.Carrier.Vexel
+import Stage1.Basis.Coordinate
+import Stage1.MultisetTree
 import Stage0.OnSeq.FusedStream
 import public Stage0.TransitionNetwork
 import Stage1.Goh.Factor
