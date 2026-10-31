@@ -92,7 +92,7 @@ watsonCrickBonds C G = 3
 watsonCrickBonds _ _ = 0
 
 ||| Proof witness certifying that complementary Watson-Crick hydrogen bonding
-||| sums to the Pentose prime: 2 (A-U) + 3 (G-C) = 5 (Factor5 Nucleic Sugar Ring).
+||| sums to the Pentose prime: 2 (A-U) + 3 (G-C) = 5 (gohFactor 5 Nucleic Sugar Ring).
 public export
 0 prfWatsonCrickPentoseBondSum : GohPrimeSum 2 3 5
 prfWatsonCrickPentoseBondSum = gohPrimeSum2_3
