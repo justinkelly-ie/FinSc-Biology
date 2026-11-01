@@ -200,7 +200,7 @@ auditLinearATPHydrolysisProof =
       h2o = MkLToken MkATP
       (adp, pi, energy) = atpHydrolysisLinear atp h2o
   in case (adp, pi, energy) of
-       (MkLToken MkADP, MkLToken MkPhosphate, OverUnixel (MkToken ATPQuantum) (MkCoordCell (Node 1 Leaf 0 1 Leaf))) => True
+       (MkLToken MkADP, MkLToken MkPhosphate, OverUnixel (MkToken ATPQuantum) (ConsCell (MkToken 1) ZeroCell)) => True
        _ => False
 
 ||| Compile-time witness: ATP hydrolysis strictly consumes linear reactants.
