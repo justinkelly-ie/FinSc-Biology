@@ -29,12 +29,11 @@ import Data.Vect
 public export
 enzymeVexel : BoxInt -> BoxInt -> BoxInt -> BoxInt -> BoxInt -> Vexel
 enzymeVexel e es s p e0 =
-  MkVexel [ (MkUnixel 0, e)
-          , (MkUnixel 1, es)
-          , (MkUnixel 2, s)
-          , (MkUnixel 3, p)
-          , (MkUnixel 4, e0)
-          ]
+  singletonCell (mkUnixel 0) e <+>
+  singletonCell (mkUnixel 1) es <+>
+  singletonCell (mkUnixel 2) s <+>
+  singletonCell (mkUnixel 3) p <+>
+  singletonCell (mkUnixel 4) e0
 
 public export
 enzymeFreeEnzyme : Vexel -> BoxInt
