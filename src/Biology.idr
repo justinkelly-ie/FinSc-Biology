@@ -7,6 +7,7 @@ import public Stage0.Biology.BiophysicalAggregation
 import public Stage0.Biology.EnzymeKinetics
 import public Stage0.Biology.HierarchicalMatterPipeline
 import public Stage0.Biology.RibosomalTranslation
+import public Stage0.Biology.TrophicEcology
 
 import public Stage1.Biology.AllostericCooperativity
 import public Stage1.Biology.UniversalAlgebraTRS
