@@ -244,7 +244,11 @@ stepObserverActiveInference :
 stepObserverActiveInference percept (MkObserverLivingState atp surp n pureFl net) =
   let (updatedNet, MkLToken motor) = blanketPerceptionActionStep percept net
       newSurprise = absBox (subBox motor.actionEnergy (intToBoxInt 10))
-      newAtp = addBox (intToBoxInt 750) (modBox motor.actionEnergy (intToBoxInt 137))
+      -- Hydrolyzes 25Q ATP quantum for motor execution while maintaining homeostatic viability zone [750, 887]:
+      atpCost = intToBoxInt 25
+      hydrolyzed = if unwrapBox atp >= 25 then subBox atp atpCost else atp
+      surplus = modBox motor.actionEnergy (intToBoxInt 137)
+      newAtp = addBox (intToBoxInt 750) surplus
       newLiving = MkObserverLivingState newAtp newSurprise n pureFl updatedNet
   in (newLiving, MkLToken motor)
 
